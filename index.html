@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enduent — Complete D2C Decision Intelligence</title>
+  <meta name="description" content="Enduent turns your fragmented D2C data into clear, actionable decisions — delivered to your WhatsApp at 8:30 AM every morning. No dashboards. No analysts. Just intelligence." />
+  <meta property="og:title" content="Enduent — Complete D2C Decision Intelligence" />
+  <meta property="og:description" content="Your business already knows what to do next. Let Enduent show you what it's saying." />
+ 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+ 
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    :root {
+      --bg:       #0A0D14;
+      --bg1:      #0F1520;
+      --bg2:      #131824;
+      --bg3:      #1A2236;
+      --border:   #253048;
+      --border2:  #1C2840;
+      --amber:    #F4A227;
+      --amber2:   #FFC55C;
+      --amberDim: rgba(244,162,39,0.12);
+      --green:    #2DD4A0;
+      --greenDim: rgba(45,212,160,0.10);
+      --blue:     #4E9EF5;
+      --blueDim:  rgba(78,158,245,0.10);
+      --red:      #F05C5C;
+      --purple:   #A78BFA;
+      --white:    #F0F4FF;
+      --muted:    #5A6A8A;
+      --subtle:   #8899BB;
+      --dim:      #2A3550;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'DM Sans', system-ui, sans-serif;
+      --font-mono:    'JetBrains Mono', monospace;
+    }
+ 
+    html { scroll-behavior: smooth; }
+ 
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+ 
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+ 
+    /* ── UTILITIES ── */
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; position: relative; }
+    .section { padding: 100px 0; position: relative; }
+    .label {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 20px;
+    }
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+ 
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 16px 0;
+      background: rgba(10,13,20,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border2);
+      transition: all 0.3s ease;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+    .nav-logo span { color: var(--amber); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--subtle);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .btn-demo {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--amber);
+      color: #0A0D14;
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-demo:hover { background: var(--amber2); transform: translateY(-1px); }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+    }
+ 
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(244,162,39,0.08) 0%, transparent 70%);
+      top: 50%; right: -100px;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .hero-glow2 {
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(45,212,160,0.06) 0%, transparent 70%);
+      bottom: 10%; left: -50px;
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--amberDim);
+      border: 1px solid rgba(244,162,39,0.2);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--amber);
+      margin-bottom: 28px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(42px, 5.5vw, 72px);
+      font-weight: 800;
+      line-height: 1.08;
+      color: var(--white);
+      max-width: 780px;
+      margin-bottom: 12px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--amber);
+    }
+    .hero-sub {
+      font-size: clamp(16px, 1.8vw, 20px);
+      color: var(--subtle);
+      max-width: 560px;
+      margin-bottom: 40px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 72px;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--amber);
+      color: #0A0D14;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 30px rgba(244,162,39,0.25);
+    }
+    .btn-primary:hover {
+      background: var(--amber2);
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(244,162,39,0.4);
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--subtle);
+      font-size: 15px;
+      font-weight: 500;
+      padding: 14px 4px;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-secondary:hover { color: var(--white); border-color: var(--subtle); }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      max-width: 560px;
+    }
+    .hero-stat {
+      background: var(--bg2);
+      padding: 24px 28px;
+    }
+    .hero-stat-val {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--amber);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .hero-stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+ 
+    /* ── SECTION HEADINGS ── */
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4vw, 50px);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 17px;
+      color: var(--subtle);
+      max-width: 560px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .section-header { margin-bottom: 60px; }
+ 
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+ 
+    /* ── PROBLEM ── */
+    #problem { background: var(--bg1); }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+    @media (max-width: 768px) { .problem-grid { grid-template-columns: 1fr; } }
+    .tab-list { display: flex; flex-direction: column; gap: 8px; }
+    .tab-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .tab-item:last-child {
+      background: var(--amberDim);
+      border-color: rgba(244,162,39,0.35);
+    }
+    .tab-icon { font-size: 18px; flex-shrink: 0; }
+    .tab-name { font-size: 14px; font-weight: 600; color: var(--white); }
+    .tab-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .tab-item:last-child .tab-name { color: var(--amber); }
+    .problem-outcome {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px;
+      position: sticky;
+      top: 100px;
+    }
+    .outcome-time {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .outcome-heading {
+      font-family: var(--font-display);
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 16px;
+      line-height: 1.25;
+    }
+    .outcome-body {
+      font-size: 15px;
+      color: var(--subtle);
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+    .outcome-bar {
+      height: 3px;
+      background: var(--amber);
+      border-radius: 2px;
+      margin-bottom: 16px;
+    }
+    .outcome-footer {
+      font-size: 13px;
+      color: var(--amber);
+      font-style: italic;
+    }
+ 
+    /* ── BLINDSPOT ── */
+    #blindspot { background: var(--bg); }
+    .blindspot-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px) { .blindspot-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .blindspot-grid { grid-template-columns: 1fr; } }
+    .blindspot-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      border-left: 3px solid;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .blindspot-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+    .blindspot-icon { font-size: 22px; margin-bottom: 12px; }
+    .blindspot-title { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 10px; line-height: 1.4; }
+    .blindspot-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
+ 
+    /* ── SOLUTION ── */
+    #solution { background: var(--bg1); }
+    .solution-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    @media (max-width: 768px) { .solution-grid { grid-template-columns: 1fr; } }
+    .solution-text .section-heading { margin-bottom: 20px; }
+    .solution-body {
+      font-size: 16px;
+      color: var(--subtle);
+      line-height: 1.8;
+      margin-bottom: 32px;
+    }
+    .pillars { display: flex; flex-direction: column; gap: 12px; }
+    .pillar {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: border-color 0.2s;
+    }
+    .pillar:hover { border-color: var(--amber); }
+    .pillar-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .pillar-title { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+    .pillar-sub { font-size: 13px; color: var(--muted); line-height: 1.5; }
+ 
+    /* ── INTELLIGENCE LAYER ── */
+    #intelligence { background: var(--bg); }
+    .intel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 768px) { .intel-grid { grid-template-columns: 1fr; } }
+    .intel-panel {
+      border-radius: 12px;
+      padding: 32px;
+      border: 1px solid;
+    }
+    .intel-panel.internal {
+      background: rgba(78,158,245,0.04);
+      border-color: rgba(78,158,245,0.25);
+    }
+    .intel-panel.external {
+      background: rgba(45,212,160,0.04);
+      border-color: rgba(45,212,160,0.25);
+    }
+    .intel-panel-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .intel-panel-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .intel-panel.internal .intel-panel-title { color: var(--blue); }
+    .intel-panel.external .intel-panel-title { color: var(--green); }
+    .intel-panel-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 24px; }
+    .intel-items { display: flex; flex-direction: column; gap: 0; }
+    .intel-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border2);
+    }
+    .intel-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .intel-item-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .intel-item-name { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 2px; }
+    .intel-item-detail { font-size: 12px; color: var(--muted); line-height: 1.5; }
+ 
+    /* ── HOW IT WORKS ── */
+    #how { background: var(--bg1); }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media (max-width: 768px) { .steps { grid-template-columns: 1fr; } }
+    .step {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .step:hover { transform: translateY(-4px); }
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--amber), transparent);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .step:nth-child(2) .step-num { background: linear-gradient(135deg, var(--green), transparent); -webkit-background-clip: text; background-clip: text; }
+    .step:nth-child(3) .step-num { background: linear-gradient(135deg, var(--blue), transparent); -webkit-background-clip: text; background-clip: text; }
+    .step-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--amber);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    .step:nth-child(2) .step-tag { color: var(--green); }
+    .step:nth-child(3) .step-tag { color: var(--blue); }
+    .step-title { font-size: 18px; font-weight: 600; color: var(--white); margin-bottom: 12px; }
+    .step-body { font-size: 14px; color: var(--muted); line-height: 1.75; }
+ 
+    /* ── WHATSAPP ── */
+    #whatsapp { background: var(--bg); }
+    .wa-grid {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+    @media (max-width: 900px) { .wa-grid { grid-template-columns: 1fr; } }
+    .phone-frame {
+      background: #111827;
+      border: 2px solid #374151;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+      position: relative;
+    }
+    .phone-notch {
+      height: 28px;
+      background: #0D1117;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .phone-notch-bar {
+      width: 80px; height: 5px;
+      background: #374151;
+      border-radius: 3px;
+    }
+    .wa-header {
+      background: #128C7E;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .wa-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: #0F5C52;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .wa-name { font-size: 14px; font-weight: 600; color: #fff; }
+    .wa-status { font-size: 11px; color: rgba(255,255,255,0.7); }
+    .wa-body {
+      background: #0B141A;
+      background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0z' fill='none'/%3E%3C/svg%3E");
+      padding: 16px 12px;
+      min-height: 360px;
+    }
+    .wa-bubble {
+      background: #1F2C34;
+      border-radius: 4px 12px 12px 12px;
+      padding: 12px 14px;
+      max-width: 280px;
+    }
+    .wa-line { margin-bottom: 6px; font-family: var(--font-body); }
+    .wa-line.head { font-size: 12px; font-weight: 600; color: #DCF8C6; }
+    .wa-line.time { font-size: 10px; color: #8696A0; margin-bottom: 12px; }
+    .wa-line.alert-title { font-size: 12px; font-weight: 700; color: #FF8080; margin-top: 10px; }
+    .wa-line.opp-title { font-size: 12px; font-weight: 700; color: #4FC3F7; margin-top: 10px; }
+    .wa-line.spend-title { font-size: 12px; font-weight: 700; color: #F4A227; margin-top: 10px; }
+    .wa-line.city-title { font-size: 12px; font-weight: 700; color: #A78BFA; margin-top: 10px; }
+    .wa-line.good-title { font-size: 12px; font-weight: 700; color: #4ADE80; margin-top: 10px; }
+    .wa-line.body { font-size: 11.5px; color: #E9EDEF; }
+    .wa-line.action { font-size: 11px; color: #8696A0; }
+    .wa-line.footer-line { font-size: 10px; color: #4A5568; margin-top: 10px; border-top: 1px solid #2A3942; padding-top: 8px; }
+ 
+    .wa-annotations { padding-top: 20px; }
+    .annotation {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border2);
+    }
+    .annotation:last-child { border-bottom: none; }
+    .ann-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .ann-label { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+    .ann-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+ 
+    /* ── DECISIONS ── */
+    #decisions { background: var(--bg1); }
+    .decisions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px) { .decisions-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .decisions-grid { grid-template-columns: 1fr; } }
+    .decision-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      transition: transform 0.2s, border-color 0.2s;
+      border-top: 3px solid;
+    }
+    .decision-card:hover { transform: translateY(-4px); }
+    .decision-icon { font-size: 24px; margin-bottom: 14px; }
+    .decision-title { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 12px; }
+    .decision-example {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-style: italic;
+      border-left: 2px solid var(--border);
+      padding-left: 12px;
+    }
+ 
+    /* ── PRICING ── */
+    #pricing { background: var(--bg); }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    @media (max-width: 700px) { .pricing-grid { grid-template-columns: 1fr; } }
+    .pricing-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 36px;
+      position: relative;
+    }
+    .pricing-card.popular {
+      background: var(--bg3);
+      border-color: var(--amber);
+      box-shadow: 0 0 0 1px rgba(244,162,39,0.1), 0 20px 60px rgba(244,162,39,0.08);
+    }
+    .popular-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--amber);
+      color: #0A0D14;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 100px;
+    }
+    .pricing-tier { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+    .pricing-amount {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .pricing-currency { font-size: 22px; font-weight: 600; color: var(--white); }
+    .pricing-num {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+    }
+    .pricing-card.popular .pricing-num { color: var(--amber); }
+    .pricing-period { font-size: 14px; color: var(--muted); }
+    .pricing-divider { height: 1px; background: var(--border); margin: 24px 0; }
+    .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .pricing-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--subtle);
+    }
+    .pricing-features li strong { color: var(--white); font-weight: 600; }
+    .check { color: var(--green); font-size: 15px; flex-shrink: 0; }
+    .pricing-cta {
+      display: block;
+      text-align: center;
+      padding: 13px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .pricing-cta.primary {
+      background: var(--amber);
+      color: #0A0D14;
+    }
+    .pricing-cta.primary:hover { background: var(--amber2); }
+    .pricing-cta.secondary {
+      background: transparent;
+      color: var(--subtle);
+      border: 1px solid var(--border);
+    }
+    .pricing-cta.secondary:hover { border-color: var(--subtle); color: var(--white); }
+    .pricing-note {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 13px;
+      color: var(--muted);
+      font-style: italic;
+    }
+    .pricing-note strong { color: var(--amber); font-style: normal; }
+ 
+    /* ── CTA SECTION ── */
+    #cta { background: var(--bg1); }
+    .cta-inner {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .cta-inner .section-heading { font-size: clamp(32px, 4.5vw, 54px); margin-bottom: 8px; }
+    .cta-inner .section-heading em { color: var(--amber); }
+    .cta-sub { font-size: 18px; color: var(--subtle); margin-bottom: 40px; line-height: 1.7; }
+    .cta-promise {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+    .cta-promise strong { color: var(--subtle); }
+ 
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 48px 0;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .footer-logo span { color: var(--amber); }
+    .footer-tagline { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .footer-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--white); }
+    .footer-copy { font-size: 12px; color: var(--dim); margin-top: 28px; text-align: center; }
+ 
+    /* ── SCROLL ANIMATIONS ── */
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.2s; }
+    .stagger-3 { transition-delay: 0.3s; }
+    .stagger-4 { transition-delay: 0.4s; }
+    .stagger-5 { transition-delay: 0.5s; }
+    .stagger-6 { transition-delay: 0.6s; }
+  </style>
+</head>
+ 
+<body>
+ 
+  <!-- ── NAV ── -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="#">Endu<span>ent</span></a>
+      <ul class="nav-links">
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+      <a class="btn-demo" href="https://calendly.com/aditi-enduent" target="_blank" rel="noopener">
+        Book a free demo →
+      </a>
+    </div>
+  </nav>
+ 
+  <!-- ── HERO ── -->
+  <section id="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <div class="container">
+      <div class="hero-eyebrow">Complete D2C Intelligence</div>
+      <h1>Your business knows<br/>the answer.<br/><em>Are you hearing it?</em></h1>
+      <p class="hero-sub">
+        Enduent connects your internal data with live market intelligence — and delivers
+        3–5 specific, actionable decisions to your WhatsApp at 8:30 AM every morning.
+        No dashboards. No analysts. Just clarity.
+      </p>
+      <div class="hero-ctas">
+        <a class="btn-primary" href="https://calendly.com/aditi-enduent" target="_blank" rel="noopener">
+          Book a free 30-min demo →
+        </a>
+        <a class="btn-secondary" href="#how">See how it works</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-val">360°</div>
+          <div class="hero-stat-label">Internal + external data, unified</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">8:30</div>
+          <div class="hero-stat-label">AM daily brief on WhatsApp</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">0</div>
+          <div class="hero-stat-label">Dashboards to log into</div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <div class="divider"></div>
+ 
+  <!-- ── PROBLEM ── -->
+  <section id="problem" class="section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="label">The Problem — Part 1</div>
+        <h2 class="section-heading">Monday morning.<br/>Same chaos, every week.</h2>
+        <p class="section-sub">You have data everywhere. But no intelligence anywhere.</p>
+      </div>
+      <div class="problem-grid">
+        <div class="tab-list fade-in stagger-1">
+          <div class="tab-item">
+            <div class="tab-icon">🛍️</div>
+            <div>
+              <div class="tab-name">Shopify Analytics</div>
+              <div class="tab-sub">Weekend orders, revenue</div>
+            </div>
+          </div>
+          <div class="tab-item">
+            <div class="tab-icon">📱</div>
+            <div>
+              <div class="tab-name">Meta Ads Manager</div>
+              <div class="tab-sub">ROAS, spend, creatives</div>
+            </div>
+          </div>
+          <div class="tab-item">
+            <div class="tab-icon">⚡</div>
+            <div>
+              <div class="tab-name">Blinkit Seller Panel</div>
+              <div class="tab-sub">Rank, inventory, GMV</div>
+            </div>
+          </div>
+          <div class="tab-item">
+            <div class="tab-icon">🟡</div>
+            <div>
+              <div class="tab-name">Zepto Dashboard</div>
+              <div class="tab-sub">Same. Again.</div>
+            </div>
+          </div>
+          <div class="tab-item">
+            <div class="tab-icon">📦</div>
+            <div>
+              <div class="tab-name">Amazon Seller Central</div>
+              <div class="tab-sub">Orders, returns, fees</div>
+            </div>
+          </div>
+          <div class="tab-item">
+            <div class="tab-icon">📊</div>
+            <div>
+              <div class="tab-name">Google Sheet</div>
+              <div class="tab-sub">Manual stitching. 2 hours. Every week.</div>
+            </div>
+          </div>
+        </div>
+        <div class="problem-outcome fade-in stagger-2">
+          <div class="outcome-time">// 2 hours later...</div>
+          <div class="outcome-heading">Still no clear answer on what to do today.</div>
+          <div class="outcome-body">
+            You have data in six different places. But nothing that connects it,
+            interprets it, and tells you what to actually do about it.
+            And this is only half the problem.
+          </div>
+          <div class="outcome-bar"></div>
+          <div class="outcome-footer">
+            "The other half is happening outside your data, right now."
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ── BLINDSPOT ── -->
+  <section id="blindspot" class="section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="label">The Problem — Part 2</div>
+        <h2 class="section-heading">While you stare at your own data,<br/>the real game is happening outside.</h2>
+      </div>
+      <div class="blindspot-grid">
+        <div class="blindspot-card fade-in stagger-1" style="border-left-color: var(--amber)">
+          <div class="blindspot-icon">⚡</div>
+          <div class="blindspot-title">Your biggest competitor just went out of stock on Zepto Mumbai.</div>
+          <div class="blindspot-desc">48-hour window to capture their customers. You found out on Friday when someone manually checked.</div>
+        </div>
+        <div class="blindspot-card fade-in stagger-2" style="border-left-color: var(--red)">
+          <div class="blindspot-icon">📉</div>
+          <div class="blindspot-title">A new brand is eating your search rankings on Blinkit Delhi.</div>
+          <div class="blindspot-desc">Position 12 to 3 in 10 days. You lost 34% of category-search visibility. Nobody told you.</div>
+        </div>
+        <div class="blindspot-card fade-in stagger-3" style="border-left-color: var(--blue)">
+          <div class="blindspot-icon">🏙️</div>
+          <div class="blindspot-title">Bengaluru has 3x your category demand versus last month.</div>
+          <div class="blindspot-desc">Google Trends is screaming expansion signal. You have zero quick commerce presence there.</div>
+        </div>
+        <div class="blindspot-card fade-in stagger-4" style="border-left-color: var(--purple)">
+          <div class="blindspot-icon">💸</div>
+          <div class="blindspot-title">You raised prices last week. Your competitor didn't.</div>
+          <div class="blindspot-desc">You lost an estimated 280 orders to them over 6 days. The price gap wasn't visible until too late.</div>
+        </div>
+        <div class="blindspot-card fade-in stagger-5" style="border-left-color: var(--green)">
+          <div class="blindspot-icon">📊</div>
+          <div class="blindspot-title">Searches for your category are up 61% in Pune this week.</div>
+          <div class="blindspot-desc">You don't know why. You're not in Pune. Opportunity missed — again.</div>
+        </div>
+        <div class="blindspot-card fade-in stagger-6" style="border-left-color: var(--amber)">
+          <div class="blindspot-icon">⭐</div>
+          <div class="blindspot-title">Your top SKU has 23 new negative reviews about packaging.</div>
+          <div class="blindspot-desc">Rating dropped from 4.3 to 3.8. Conversion fell 18%. You noticed this month.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <div class="divider"></div>
+ 
+  <!-- ── SOLUTION ── -->
+  <section id="solution" class="section">
+    <div class="container">
+      <div class="solution-grid">
+        <div class="solution-text fade-in">
+          <div class="label">Introducing Enduent</div>
+          <h2 class="section-heading">Not analytics.<br/>A complete decision<br/>intelligence system.</h2>
+          <p class="solution-body">
+            Enduent sees everything happening inside your business AND in the market around you —
+            then tells you exactly what to do about it.
+            Delivered to your WhatsApp at 8:30 every morning.
+          </p>
+          <a class="btn-primary" href="https://calendly.com/aditi-enduent" target="_blank" rel="noopener">
+            Book a free demo →
+          </a>
+        </div>
+        <div class="pillars fade-in stagger-2">
+          <div class="pillar">
+            <div class="pillar-icon">📡</div>
+            <div>
+              <div class="pillar-title">Sees inside your business</div>
+              <div class="pillar-sub">Sales, inventory, ads, customers across all channels — connected automatically.</div>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon">🌐</div>
+            <div>
+              <div class="pillar-title">Sees outside your business</div>
+              <div class="pillar-sub">Competitor moves, market shifts, demand surges, ranking changes — tracked in real time.</div>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon">🧠</div>
+            <div>
+              <div class="pillar-title">Understands what it means</div>
+              <div class="pillar-sub">AI connects dots across thousands of data points humans would never catch.</div>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon">📲</div>
+            <div>
+              <div class="pillar-title">Tells you exactly what to do</div>
+              <div class="pillar-sub">Specific actions with quantified rupee impact — delivered to WhatsApp. Zero dashboards.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ── INTELLIGENCE LAYER ── -->
+  <section id="intelligence" class="section">
+    <div class="container">
+      <div class="section-header fade-in" style="text-align:center; max-width:600px; margin:0 auto 60px;">
+        <div class="label">The Intelligence Layer</div>
+        <h2 class="section-heading">Two worlds of data.<br/>One complete picture.</h2>
+      </div>
+      <div class="intel-grid">
+        <div class="intel-panel internal fade-in stagger-1">
+          <div class="intel-panel-head">
+            <span>📊</span>
+            <div class="intel-panel-title">Your Internal Data</div>
+          </div>
+          <div class="intel-panel-sub">Connected via official APIs — authorized by you, automated by us</div>
+          <div class="intel-items">
+            <div class="intel-item">
+              <div class="intel-item-icon">🛍️</div>
+              <div>
+                <div class="intel-item-name">Shopify</div>
+                <div class="intel-item-detail">Orders, customers, LTV, returns, inventory, discounts</div>
+              </div>
+            </div>
+            <div class="intel-item">
+              <div class="intel-item-icon">📱</div>
+              <div>
+                <div class="intel-item-name">Meta Ads</div>
+                <div class="intel-item-detail">Spend, ROAS, CPM, CAC by campaign, creative, audience</div>
+              </div>
+            </div>
+            <div class="intel-item">
+              <div class="intel-item-icon">🔍</div>
+              <div>
+                <div class="intel-item-name">Google Ads & Analytics</div>
+                <div class="intel-item-detail">Search performance, shopping campaigns, traffic funnels</div>
+              </div>
+            </div>
+            <div class="intel-item">
+              <div class="intel-item-icon">📦</div>
+              <div>
+                <div class="intel-item-name">Amazon</div>
+                <div class="intel-item-detail">Sales, BSR rank, reviews, FBA fees, Buy Box status</div>
+              </div>
+            </div>
+            <div class="intel-item">
+              <div class="intel-item-icon">⚡</div>
+              <div>
+                <div class="intel-item-name">Blinkit / Zepto / Instamart</div>
+                <div class="intel-item-detail">GMV, inventory, visibility scores, city & dark store data</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="intel-panel external fade-in stagger-2">
+          <div class="intel-panel-head">
+            <span>🌐</span>
+            <div class="intel-panel-title">Live Market Intelligence</div>
+          </div>
+          <div class="intel-panel-sub">Scraped, aggregated and analysed — data your competitors can't give you</div>
+          <div class="intel-items">
+            <div class="intel-item">
+              <div class="intel-item-icon">🎯</div>
+              <div>
+                <div class="intel-item-name">Competitor Pricing</div>
+                <div class="intel-item-detail">Real-time prices, discounts, promotions across all platforms</div>
+              </div>
+            </div>
+            <div class="intel-item">
+              <div class="intel-item-icon">📉</div>
+              <div>
+                <div class="intel-item-name">Search Rankings</div>
+                <div class="intel-item-detail">Where your brand ranks for key terms on Blinkit, Zepto, Amazon</div>
+              </div>
+            </div>
+            <div class="intel-item">
+              <div class="intel-item-icon">📦</div>
+              <div>
+                <div class="intel-item-name">Competitor Stock Status</div>
+                <div class="intel-item-detail">When competitors go OOS — your opportunity window, instantly</div>
+              </div>
+            </div>
+            <div class="intel-item">
+              <div class="intel-item-icon">🔥</div>
+              <div>
+                <div class="intel-item-name">Demand Signals</div>
+                <div class="intel-item-detail">Google Trends by city — category surges before they hit your sales</div>
+              </div>
+            </div>
+            <div class="intel-item">
+              <div class="intel-item-icon">⭐</div>
+              <div>
+                <div class="intel-item-name">Review & Sentiment Intelligence</div>
+                <div class="intel-item-detail">Rating trends, sentiment shifts — yours and competitors', early</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <div class="divider"></div>
+ 
+  <!-- ── HOW IT WORKS ── -->
+  <section id="how" class="section">
+    <div class="container">
+      <div class="section-header fade-in" style="text-align:center; max-width:540px; margin:0 auto 60px;">
+        <div class="label">How It Works</div>
+        <h2 class="section-heading">Three steps.<br/>You own only the first.</h2>
+      </div>
+      <div class="steps">
+        <div class="step fade-in stagger-1">
+          <div class="step-num">01</div>
+          <div class="step-tag">Day 1 — 30 minutes</div>
+          <div class="step-title">Connect once</div>
+          <div class="step-body">
+            One-click OAuth for Shopify, Meta, Google and Amazon. For Blinkit and Zepto,
+            you drop your weekly CSV into a shared Google Drive folder.
+            Total setup time: under 30 minutes. Never repeated.
+          </div>
+        </div>
+        <div class="step fade-in stagger-2">
+          <div class="step-num">02</div>
+          <div class="step-tag">Every night, automatically</div>
+          <div class="step-title">We run everything</div>
+          <div class="step-body">
+            Our pipelines pull your data, our scrapers monitor competitors and market signals,
+            and our AI engine analyses thousands of data points across your full business picture.
+            All overnight, every night.
+          </div>
+        </div>
+        <div class="step fade-in stagger-3">
+          <div class="step-num">03</div>
+          <div class="step-tag">8:30 AM, every morning</div>
+          <div class="step-title">You wake up to decisions</div>
+          <div class="step-body">
+            A WhatsApp message with 3–5 specific, numbered actions for today.
+            Each one backed by exact data and with the rupee impact quantified.
+            Not charts. Not raw data. Decisions.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ── WHATSAPP ── -->
+  <section id="whatsapp" class="section" style="background: var(--bg1);">
+    <div class="container">
+      <div class="section-header fade-in" style="text-align:center; max-width:540px; margin:0 auto 60px;">
+        <div class="label">What You Actually Receive</div>
+        <h2 class="section-heading">Real intelligence.<br/>Real numbers. Real decisions.</h2>
+      </div>
+      <div class="wa-grid">
+        <div class="phone-frame fade-in stagger-1">
+          <div class="phone-notch"><div class="phone-notch-bar"></div></div>
+          <div class="wa-header">
+            <div class="wa-avatar">⚡</div>
+            <div>
+              <div class="wa-name">Enduent</div>
+              <div class="wa-status">🟢 online</div>
+            </div>
+          </div>
+          <div class="wa-body">
+            <div class="wa-bubble">
+              <div class="wa-line head">🌅 Enduent — Good Morning Brief</div>
+              <div class="wa-line time">Mon 2 June · 8:30 AM</div>
+ 
+              <div class="wa-line alert-title">🚨 URGENT — Restock Ashwagandha</div>
+              <div class="wa-line body">1.8 days left on Blinkit Delhi. 47 units/day.</div>
+              <div class="wa-line action">👉 Order 500 units today. Impact: ₹94,000</div>
+ 
+              <div class="wa-line opp-title">📈 Opportunity — Zepto Mumbai</div>
+              <div class="wa-line body">Wellbeing OOS on Omega-3. You rank #2 with stock.</div>
+              <div class="wa-line action">👉 Run 10% promo. Est: +₹28,000</div>
+ 
+              <div class="wa-line spend-title">💸 Fix Meta iOS — CAC 2.3× spike</div>
+              <div class="wa-line body">iOS CAC ₹418 vs ₹183 last week. Android fine.</div>
+              <div class="wa-line action">👉 Pause iOS campaigns. Saves ₹16,000/week</div>
+ 
+              <div class="wa-line city-title">🏙️ Expansion Signal — Pune</div>
+              <div class="wa-line body">31% lower CAC vs avg. Zero QC presence.</div>
+              <div class="wa-line action">👉 Request Blinkit expansion this week</div>
+ 
+              <div class="wa-line good-title">✅ Zepto Bengaluru +41% WoW</div>
+              <div class="wa-line action">Maintain course, no action needed.</div>
+ 
+              <div class="wa-line footer-line">Reply HELP for analysis · PAUSE to stop</div>
+            </div>
+          </div>
+        </div>
+        <div class="wa-annotations fade-in stagger-2">
+          <div class="annotation">
+            <div class="ann-dot" style="background:var(--red)"></div>
+            <div>
+              <div class="ann-label">🚨 Critical Alert</div>
+              <div class="ann-desc">Internal data: stockout detected 3 days before it happens. Revenue impact pre-calculated in rupees.</div>
+            </div>
+          </div>
+          <div class="annotation">
+            <div class="ann-dot" style="background:var(--blue)"></div>
+            <div>
+              <div class="ann-label">📈 Market Opportunity</div>
+              <div class="ann-desc">External intelligence: competitor OOS detected in real-time. 48-hour window surfaced automatically.</div>
+            </div>
+          </div>
+          <div class="annotation">
+            <div class="ann-dot" style="background:var(--amber)"></div>
+            <div>
+              <div class="ann-label">💸 Spend Anomaly</div>
+              <div class="ann-desc">Statistical engine flags CAC 2.3 standard deviations above baseline. Exact action, exact savings.</div>
+            </div>
+          </div>
+          <div class="annotation">
+            <div class="ann-dot" style="background:var(--purple)"></div>
+            <div>
+              <div class="ann-label">🏙️ Strategic Signal</div>
+              <div class="ann-desc">External demand data + internal CAC combined to surface a city expansion opportunity you'd never see otherwise.</div>
+            </div>
+          </div>
+          <div style="margin-top:8px;">
+            <a class="btn-primary" href="https://calendly.com/aditi-enduent" target="_blank" rel="noopener" style="display:inline-flex;">
+              Get a live demo with your own data →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ── DECISIONS ── -->
+  <section id="decisions" class="section">
+    <div class="container">
+      <div class="section-header fade-in" style="text-align:center; max-width:560px; margin:0 auto 60px;">
+        <div class="label">What Enduent Makes Possible</div>
+        <h2 class="section-heading">Six decision categories.<br/>Backed by complete intelligence.</h2>
+      </div>
+      <div class="decisions-grid">
+        <div class="decision-card fade-in stagger-1" style="border-top-color:var(--amber)">
+          <div class="decision-icon">🏙️</div>
+          <div class="decision-title">City Expansion</div>
+          <div class="decision-example">"Pune demand index up 68% MoM with 29% lower CAC than your current cities. Expand dark store presence now."</div>
+        </div>
+        <div class="decision-card fade-in stagger-2" style="border-top-color:var(--red)">
+          <div class="decision-icon">📦</div>
+          <div class="decision-title">SKU Lifecycle</div>
+          <div class="decision-example">"Your Mango variant has 3.4× the return rate and a negative contribution margin. The data says drop it or reformulate."</div>
+        </div>
+        <div class="decision-card fade-in stagger-3" style="border-top-color:var(--green)">
+          <div class="decision-icon">💰</div>
+          <div class="decision-title">Pricing Strategy</div>
+          <div class="decision-example">"Competitor raised prices by 12% on Blinkit. Your price gap is now an advantage — don't match it."</div>
+        </div>
+        <div class="decision-card fade-in stagger-4" style="border-top-color:var(--blue)">
+          <div class="decision-icon">📣</div>
+          <div class="decision-title">Marketing Efficiency</div>
+          <div class="decision-example">"Google drives 67% of repeat customers but gets 20% of budget. Meta drives one-time buyers. Rebalance today."</div>
+        </div>
+        <div class="decision-card fade-in stagger-5" style="border-top-color:var(--purple)">
+          <div class="decision-icon">⚡</div>
+          <div class="decision-title">Platform Prioritisation</div>
+          <div class="decision-example">"Zepto Bengaluru is your highest-ROAS channel. Blinkit Delhi margins are being compressed. Shift inventory focus."</div>
+        </div>
+        <div class="decision-card fade-in stagger-6" style="border-top-color:var(--amber)">
+          <div class="decision-icon">🎯</div>
+          <div class="decision-title">Competitive Response</div>
+          <div class="decision-example">"Your top competitor is OOS in 3 cities for their hero SKU. You have 36–72 hours. Here is exactly what to do."</div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <div class="divider"></div>
+ 
+  <!-- ── PRICING ── -->
+  <section id="pricing" class="section" style="background:var(--bg1);">
+    <div class="container">
+      <div class="section-header fade-in" style="text-align:center; max-width:480px; margin:0 auto 60px;">
+        <div class="label">Pricing</div>
+        <h2 class="section-heading">Straightforward.<br/>No surprises.</h2>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card fade-in stagger-1">
+          <div class="pricing-tier">Starter</div>
+          <div class="pricing-amount">
+            <span class="pricing-currency">₹</span>
+            <span class="pricing-num">15,000</span>
+            <span class="pricing-period">/ month</span>
+          </div>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> <span>Up to <strong>100 SKUs</strong></span></li>
+            <li><span class="check">✓</span> <span><strong>3 channels</strong> (Shopify + 2 QC)</span></li>
+            <li><span class="check">✓</span> <span>Daily <strong>WhatsApp brief</strong></span></li>
+            <li><span class="check">✓</span> <span>Inventory & stockout alerts</span></li>
+            <li><span class="check">✓</span> <span>Competitor price tracking</span></li>
+            <li><span class="check">✓</span> <span>Weekly summary report</span></li>
+          </ul>
+          <a class="pricing-cta secondary" href="https://calendly.com/aditi-enduent" target="_blank" rel="noopener">Book a demo</a>
+        </div>
+        <div class="pricing-card popular fade-in stagger-2">
+          <div class="popular-badge">Most Popular</div>
+          <div class="pricing-tier">Growth</div>
+          <div class="pricing-amount">
+            <span class="pricing-currency" style="color:var(--amber)">₹</span>
+            <span class="pricing-num">25,000</span>
+            <span class="pricing-period">/ month</span>
+          </div>
+          <div class="pricing-divider" style="background:rgba(244,162,39,0.2)"></div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> <span><strong>Unlimited SKUs</strong></span></li>
+            <li><span class="check">✓</span> <span><strong>All channels</strong> (QC + Amazon + GA4)</span></li>
+            <li><span class="check">✓</span> <span><strong>Daily brief + real-time alerts</strong></span></li>
+            <li><span class="check">✓</span> <span>City-level expansion intelligence</span></li>
+            <li><span class="check">✓</span> <span>Deep competitor & ranking tracking</span></li>
+            <li><span class="check">✓</span> <span>Monthly 30-min strategy review call</span></li>
+          </ul>
+          <a class="pricing-cta primary" href="https://calendly.com/aditi-enduent" target="_blank" rel="noopener">Book a demo</a>
+        </div>
+      </div>
+      <p class="pricing-note">
+        <strong>"Less than what a single undetected stockout costs you in a week."</strong>
+      </p>
+    </div>
+  </section>
+ 
+  <!-- ── CTA ── -->
+  <section id="cta" class="section">
+    <div class="container">
+      <div class="cta-inner fade-in">
+        <div class="label" style="text-align:center">Get Started</div>
+        <h2 class="section-heading">Your business already knows<br/><em>what to do next.</em></h2>
+        <p class="cta-sub">
+          Start with a free 30-minute call. We'll show you exactly what Enduent
+          would have told you about your business last week — using your own data.
+        </p>
+        <a class="btn-primary" style="font-size:17px; padding:16px 36px;" href="https://calendly.com/aditi-enduent" target="_blank" rel="noopener">
+          Book a free 30-minute demo →
+        </a>
+        <p class="cta-promise">No commitment. <strong>Live demo with your actual data.</strong> Takes 30 minutes.</p>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <a class="footer-logo" href="#">Endu<span>ent</span></a>
+          <div class="footer-tagline">Complete D2C Decision Intelligence</div>
+        </div>
+        <ul class="footer-links">
+          <li><a href="#problem">Problem</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="mailto:aditi@enduent.com">aditi@enduent.com</a></li>
+        </ul>
+        <a class="btn-demo" href="https://calendly.com/aditi-enduent" target="_blank" rel="noopener">Book a demo →</a>
+      </div>
+      <div class="footer-copy">© 2026 Enduent. All rights reserved. · enduent.com</div>
+    </div>
+  </footer>
+ 
+  <script>
+    // Scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+ 
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+ 
+    // Nav scroll effect
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        nav.style.background = 'rgba(10,13,20,0.98)';
+        nav.style.borderBottomColor = 'rgba(37,48,72,0.8)';
+      } else {
+        nav.style.background = 'rgba(10,13,20,0.85)';
+        nav.style.borderBottomColor = 'rgba(28,40,64,1)';
+      }
+    });
+  </script>
+</body>
+</html>
